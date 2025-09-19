@@ -7,6 +7,7 @@ import com.tradingbacktester.model.TradingSignal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
@@ -17,15 +18,16 @@ import java.util.UUID;
 
 /**
  * Service for BigQuery operations - inserting and querying data
+ * Only available when BigQuery bean is configured
  */
 @Service
 public class BigQueryService {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(BigQueryService.class);
-    
+
     private final BigQuery bigQuery;
     private final BigQueryConfig bigQueryConfig;
-    
+
     @Autowired
     public BigQueryService(BigQuery bigQuery, BigQueryConfig bigQueryConfig) {
         this.bigQuery = bigQuery;

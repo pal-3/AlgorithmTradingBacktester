@@ -16,6 +16,7 @@ import java.util.List;
 /**
  * SpringBatch ItemReader for fetching market data from Alpha Vantage API
  */
+
 @Component
 @StepScope
 public class MarketDataReader implements ItemReader<List<MarketData>> {

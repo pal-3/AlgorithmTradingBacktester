@@ -83,7 +83,7 @@ public class AlphaVantageService {
      * Build the API URL for time series request
      */
     private String buildTimeSeriesUrl(String symbol, String outputSize) {
-        return String.format("%s?function=TIME_SERIES_DAILY_ADJUSTED&symbol=%s&outputsize=%s&apikey=%s",
+        return String.format("%s?function=TIME_SERIES_DAILY&symbol=%s&outputsize=%s&apikey=%s",
                 baseUrl, symbol, outputSize, apiKey);
     }
     
@@ -93,6 +93,9 @@ public class AlphaVantageService {
     private List<MarketData> parseTimeSeriesResponse(String response, String symbol) throws Exception {
         JsonNode rootNode = objectMapper.readTree(response);
         
+        // Debug: Log the actual response structure
+        logger.info("API Response keys: {}", rootNode.fieldNames());
+        logger.info("Full response: {}", response.substring(0, Math.min(500, response.length())));
         // Check for API errors
         if (rootNode.has("Error Message")) {
             throw new RuntimeException("API Error: " + rootNode.get("Error Message").asText());
@@ -130,8 +133,8 @@ public class AlphaVantageService {
                 marketData.setHighPrice(new BigDecimal(dailyData.get("2. high").asText()));
                 marketData.setLowPrice(new BigDecimal(dailyData.get("3. low").asText()));
                 marketData.setClosePrice(new BigDecimal(dailyData.get("4. close").asText()));
-                marketData.setAdjustedClose(new BigDecimal(dailyData.get("5. adjusted close").asText()));
-                marketData.setVolume(Long.parseLong(dailyData.get("6. volume").asText()));
+                marketData.setAdjustedClose(new BigDecimal(dailyData.get("4. close").asText())); // Use close price as adjusted close for free endpoint
+                marketData.setVolume(Long.parseLong(dailyData.get("5. volume").asText()));
                 
                 marketDataList.add(marketData);
                 

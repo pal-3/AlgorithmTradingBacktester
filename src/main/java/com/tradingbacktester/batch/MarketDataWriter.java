@@ -15,14 +15,18 @@ import java.util.List;
  */
 @Component
 public class MarketDataWriter implements ItemWriter<List<MarketData>> {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(MarketDataWriter.class);
-    
-    @Autowired
-    private BigQueryService bigQueryService;
-    
+
+    private final BigQueryService bigQueryService;
+
     private int totalRecordsWritten = 0;
-    
+
+    @Autowired
+    public MarketDataWriter(BigQueryService bigQueryService) {
+        this.bigQueryService = bigQueryService;
+    }
+
     @Override
     public void write(List<? extends List<MarketData>> chunks) throws Exception {
         logger.info("Writing {} chunks of market data to BigQuery", chunks.size());
@@ -38,7 +42,7 @@ public class MarketDataWriter implements ItemWriter<List<MarketData>> {
                     if (success) {
                         totalRecordsWritten += chunk.size();
                         logger.info("Successfully wrote {} records for symbol: {}. Total records written: {}", 
-                                   chunk.size(), symbol, totalRecordsWritten);
+                                chunk.size(), symbol, totalRecordsWritten);
                     } else {
                         logger.error("Failed to write market data for symbol: {}", symbol);
                         throw new RuntimeException("Failed to write market data to BigQuery for symbol: " + symbol);
@@ -55,14 +59,14 @@ public class MarketDataWriter implements ItemWriter<List<MarketData>> {
         
         logger.info("Completed writing batch. Total records written so far: {}", totalRecordsWritten);
     }
-    
+
     /**
      * Get the total number of records written
      */
     public int getTotalRecordsWritten() {
         return totalRecordsWritten;
     }
-    
+
     /**
      * Reset the counter (useful for testing)
      */

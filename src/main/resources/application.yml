@@ -33,6 +33,10 @@ spring:
       initialize-schema: always
 
 # Google Cloud BigQuery Configuration
+# Set bigquery.enabled=true to enable BigQuery integration
+bigquery:
+  enabled: ${BIGQUERY_ENABLED:false}
+
 google:
   cloud:
     bigquery:
@@ -42,7 +46,7 @@ google:
       
 # Alpha Vantage API (for market data)
 alpha-vantage:
-  api-key: ${ALPHA_VANTAGE_API_KEY:demo}
+  api-key: ${ALPHA_VANTAGE_API_KEY:O1HMQYK5L1U9RVEW}
   base-url: https://www.alphavantage.co/query
   
 # Application specific settings
