@@ -73,7 +73,8 @@ public class MovingAverageStrategy implements TradingStrategy {
         
         // Generate signals based on crossovers
         for (int i = 1; i < shortMA.size(); i++) {
-            MarketData currentData = marketData.get(i + longPeriod - 1); // Adjust for MA offset
+            int dataIndex = i + longPeriod - 1; // Calculate the correct index
+            MarketData currentData = marketData.get(dataIndex); // Adjust for MA offset
             
             BigDecimal currentShortMA = shortMA.get(i);
             BigDecimal previousShortMA = shortMA.get(i - 1);
